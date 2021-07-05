@@ -1,8 +1,8 @@
 package control;
 
 import java.util.Scanner;
-import java.util.Vector;
 
+import connection.UserData;
 import model.User;
 import service.Validation;
 
@@ -10,9 +10,9 @@ public class UserChoice {
 	
 	static Scanner scan = new Scanner(System.in);	// scan to read input from the user
 	static Validation validation = new Validation();
-	
+	static UserData userData = new UserData(); 
 	// Code Related to User Choice-1	i.e., SignUp
-	public static User signUp() {
+	public static void signUp() {
 		try{
 			System.out.print("\nEnter your First Name : ");
 			String firstName = scan.nextLine();
@@ -35,8 +35,12 @@ public class UserChoice {
 				System.out.print("Enter Password : ");
 				String password = scan.nextLine();
 				if( validation.validateUserDetails(username, password)) {
-					System.out.println("You've Sucessfully Created an Account !");
-					return new User(firstName, lastName, gender, age, location, phno, username, password);
+					if( userData.loadUserData(new User(firstName, lastName, gender, age, location, phno, username, password)) ) {
+						System.out.println("\nYou've Sucessfully Created an Account !");
+						System.out.print("\nPlease provide your Credentials for Log-In");
+						logIn();
+					}
+					
 				}
 			}
 		}
@@ -45,32 +49,22 @@ public class UserChoice {
 			scan.nextLine(); // To read unwanted \n
 			signUp();
 		}
-		return null;
 	}
 	
 	// Code Related to User Choice-2	i.e., LogIn
-	public static void logIn(Vector<User> userList) {
+	public static void logIn() {
 		try {
-			System.out.print("Enter Username : ");
+			System.out.print("\nEnter Username : ");
 			String username = scan.nextLine();
 			System.out.print("Enter Password : ");
 			String password = scan.nextLine();
-			int i;
-			for(i=0; i<userList.size(); i++) {
-				if( userList.get(i).getUsername().equals(username)
-						&& userList.get(i).getPassword().equals(password)) {
-					System.out.println("Hello, "+userList.get(i).getFirstName()+" !");
-					System.out.println("\nYou've Sucessfully logged-In." );
-					break;
-				}
-			}
-			if(i == userList.size()) {
-				System.out.println("\nIn-Valid Username or Password !");
-			}
+			User user = userData.getUserData(username, password);
+			if( user != null)
+				System.out.println("\nHello, "+ user.getFirstName()+" :)");
 			
 		}
 		catch(Exception e) {
-			System.out.println("\nAlert !!!\nYou've Entered mis-match Input.");	// Error-Display for Non-Numeric Input
+			System.out.println("\nAlert !!!\nYou've Entered mis-match Input."+e);	// Error-Display for Non-Numeric Input
 		}
 	}
 

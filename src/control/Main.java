@@ -1,13 +1,9 @@
 package control;
 
 import java.util.Scanner;
-import java.util.Vector;
-
-import model.User;
 
 public class Main {
 	public static void main(String[] args) {
-		Vector<User> userList = new Vector<User>();
 		
 		Scanner scan = new Scanner(System.in);	// scan to read input from the user
 		System.out.println("-------->>>>>----------  Welcome  ----------<<<<<--------");	// Displaying the Welcome Text
@@ -23,12 +19,10 @@ public class Main {
 				choice = scan.nextInt();	// Reading User Choice
 				switch(choice) {	// Checking Choice
 					case 1:
-						User user = UserChoice.signUp();	// SignUp Choice
-						if(user != null)
-							userList.add(user);
+						UserChoice.signUp();	// SignUp Choice
 						break;
 					case 2:
-						UserChoice.logIn(userList);		// LogIn Choice
+						UserChoice.logIn();		// LogIn Choice
 						break;
 					case 0:
 						System.out.println("\nYou're about to Close !");	// Displaying Exiting Message
